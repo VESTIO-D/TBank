@@ -5,7 +5,7 @@ export default function RootLayout({
     children: React.ReactNode;
   }>) {
     return (
-      <main className="w-full flex">
+      <main className="w-full flex gap-2">
         <Sidebar />
           {children}
       </main>
