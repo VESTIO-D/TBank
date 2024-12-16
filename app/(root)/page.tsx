@@ -7,11 +7,11 @@ const Home = () => {
 const [showForm, setShowForm] = useState(false);
 
 return (
-<section className="h-screen grid w-full gap-2">
+<section className="h-screen w-full">
 
     <div className={`${
          showForm ?
-    "h-[250px]" : "h-[150px]"
+    "h-[350px]" : "h-[150px]"
     } bg-gradient-to-tr from-sky-300/90 to-sky-800/95 px-4 py-3 transition-all duration-300`}>
     <div className="flex justify-between gap-3 items-center w-full">
         <h1 className="text-xl font-bold">TBANK</h1>
@@ -70,8 +70,25 @@ return (
     </div>
     </div>
 
-    <div className="">
-      hello
+    <div className="bg-zinc-200/80 h-screen">
+      <div className="p-4">
+        <a
+         href="/" 
+         className=""
+         >
+
+            <div className="bg-zinc-50 rounded-xl py-3 px-4 shadow-md">
+                <h2 className="text-xs md:text-sm font-semibold">
+                    VIEW BALANCE
+                </h2>
+                <p className="text-xs md:text-sm font-thin font-ibm-plex-serif">
+                        View account balance and recent transactions
+                </p>
+            </div>
+            
+         </a>
+
+      </div>
     </div>
 
     
