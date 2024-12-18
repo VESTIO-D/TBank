@@ -38,11 +38,11 @@ const sidebarLinks: SidebarLink[] = [
 
 const Mobilenav = () => {
 
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState(false);
 
-const toggleVisibility = () => {
-  setIsHidden(!isHidden); // Toggles the state
-};
+  const toggleVisibility = () => {
+    setIsHidden(!isHidden); // Toggles the state
+  };
 
   const pathname = usePathname()
 
@@ -91,7 +91,7 @@ const toggleVisibility = () => {
                     width={34}
                     height={34}
                     alt="TBank"
-                    className="max-xl:size-8"
+                    className=""
                     />
 
                     <h1 className="font-bold font-ibm-plex-serif  xl:block text-black-1 max-xl:text-lg">TBank</h1>
@@ -106,7 +106,10 @@ const toggleVisibility = () => {
                     <Link
                      href={i.route} 
                      key={i.label}
-                     onClick={setIsHidden}
+                     onClick={(event) => {
+                      event.preventDefault();
+                      setIsHidden((prev) => !prev);
+                    }}
                      className={cn('flex gap-3 items-center p-4 rounded-lg w-full max-w-60', {
                         'bg-bank-gradient': isActive
                     })}>
