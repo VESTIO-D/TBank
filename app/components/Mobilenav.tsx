@@ -107,7 +107,6 @@ const Mobilenav = () => {
                      href={i.route} 
                      key={i.label}
                      onClick={(event) => {
-                      event.preventDefault();
                       setIsHidden((prev) => !prev);
                     }}
                      className={cn('flex gap-3 items-center p-4 rounded-lg w-full max-w-60', {
