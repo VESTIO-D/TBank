@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-
+import { signIn } from "../libs/user/user.actions";
 interface UserData {
-  name: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   confirm: string;
@@ -12,20 +12,22 @@ interface UserData {
 
 const Signin = () => {
   const [userData, setUserData] = useState<UserData>({
-    name: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     confirm: "",
   });
 
   const [errors, setErrors] = useState<Partial<UserData>>({});
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<UserData> = {};
 
-    if (!userData.name) newErrors.name = "First name is required.";
-    if (!userData.lastName) newErrors.lastName = "Last name is required.";
+    if (!userData.firstname) newErrors.firstname = "First name is required.";
+    if (!userData.lastname) newErrors.lastname = "Last name is required.";
     if (!userData.email) {
       newErrors.email = "Email is required.";
     } else if (!/\S+@\S+\.\S+/.test(userData.email)) {
@@ -44,15 +46,30 @@ const Signin = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form submitted successfully", userData);
-      // Handle successful submission logic here
+      try {
+        const response = await signIn(userData);
+        setSuccess(response.message);
+        setError(null);
+        console.log("Success:", response.message);
+      } catch (err: any) {
+        if (err.response && err.response.error) {
+          setError(err.response.error);
+          console.error("Backend Error:", err.response.error);
+        } else {
+          setError(err.message || "An error occurred");
+          console.error("Error:", err.message || "An error occurred");
+        }
+        setSuccess(null);
+      }
     } else {
       console.log("Form has errors", errors);
     }
   };
+  
 
   return (
     <section className="grid h-screen w-full bg-zinc-200/80">
@@ -82,15 +99,15 @@ const Signin = () => {
                 </h3>
                 <input
                   type="text"
-                  name="name"
+                  name="firstname"
                   placeholder="First Name"
                   className="p-2 w-full rounded-lg outline-none bg-zinc-200/95"
                   onChange={(e) =>
-                    setUserData({ ...userData, name: e.target.value })
+                    setUserData({ ...userData, firstname: e.target.value })
                   }
                 />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                {errors.firstname && (
+                  <p className="text-red-500 text-xs mt-1">{errors.firstname}</p>
                 )}
               </div>
 
@@ -104,11 +121,11 @@ const Signin = () => {
                   placeholder="Last Name"
                   className="p-2 w-full rounded-lg outline-none bg-zinc-200/95"
                   onChange={(e) =>
-                    setUserData({ ...userData, lastName: e.target.value })
+                    setUserData({ ...userData, lastname: e.target.value })
                   }
                 />
-                {errors.lastName && (
-                  <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+                {errors.lastname && (
+                  <p className="text-red-500 text-xs mt-1">{errors.lastname}</p>
                 )}
               </div>
             </div>
@@ -128,6 +145,11 @@ const Signin = () => {
               />
               {errors.email && (
                 <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+              {error && (
+                <div className="text-red-500 text-sm text-start mt-1">
+                  {error}
+                </div>
               )}
             </div>
 
@@ -171,8 +193,7 @@ const Signin = () => {
               type="submit"
               className="mb-8 bg-sky-900/85 text-zinc-100 p-2 w-full rounded-xl font-semibold"
             >
-              Log in
-            </button>
+              sigin            </button>
             <div className="flex justify-between px-2">
               <p className="text-[12px] md:text-sm">Already registered?</p>
               <Link href="/" className="text-sky-700/95 text-[12px] md:text-sm">
@@ -180,6 +201,7 @@ const Signin = () => {
               </Link>
             </div>
           </form>
+          
         </div>
       </div>
     </section>
