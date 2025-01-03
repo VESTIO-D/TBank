@@ -1,19 +1,33 @@
 "use client";
 import React, { useState } from 'react'
 import Link from 'next/link'
+import {  signUp } from '../libs/user/user.actions';
 
 interface loginData {
-    username: string;
-    password: string
+    email: string;
+    password: string;
 };
 
 const Home = () => {
     const [loginData, setloginData] = useState<loginData>({
-        username: "",
+        email: "",
         password: "",
     });
 
     console.log(loginData)
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const { email, password } = loginData;
+
+        try {
+            const response = await signUp(email, password);
+            console.log('Full Response:', response); // Log the response object
+            console.log('JWT Token:', response.jwt);
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    }
 
     return (
     <section className="h-screen w-full bg-zinc-200/80">
@@ -34,6 +48,7 @@ const Home = () => {
                 <form
                         action=""
                         className=""
+                        onSubmit={handleSubmit}
                 >
                     <div className="mb-4">
                         <input
@@ -41,7 +56,7 @@ const Home = () => {
                                 name="username"
                                 placeholder="username"
                                 className="p-2 mt-4 w-full rounded-lg outline-none bg-zinc-200/95"
-                                onChange={(e) => setloginData({...loginData, username: e.target.value})}
+                                onChange={(e) => setloginData({...loginData, email: e.target.value})}
                         />
                     </div>
 
@@ -76,7 +91,7 @@ const Home = () => {
             </div>
         </div>
 
-        <div className=" h-screen">
+        <div className="">
         <div className="px-3 py-4 grid place-items-center">
             <a
             href="/" 
